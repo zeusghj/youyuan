@@ -14,6 +14,10 @@ BOT_NAME = 'youyuan'
 SPIDER_MODULES = ['youyuan.spiders']
 NEWSPIDER_MODULE = 'youyuan.spiders'
 
+MONGODB_SERVER = "localhost"
+MONGODB_PORT = 27017
+MONGODB_DB = "youyuan"
+MONGODB_COLLECTION = "user"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'youyuan (+http://www.yourdomain.com)'
@@ -61,9 +65,9 @@ NEWSPIDER_MODULE = 'youyuan.spiders'
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'youyuan.pipelines.SomePipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'youyuan.pipelines.YouyuanPipeline': 1,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

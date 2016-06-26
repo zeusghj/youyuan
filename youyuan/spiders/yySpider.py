@@ -19,6 +19,8 @@ class yySpider(Spider):
 
         print response.url
 
+        items = []
+
         liResults = Selector(response).xpath('//ul[@class="mian search_list"]/li/dl/dd')
 
         for li in liResults:
@@ -34,15 +36,21 @@ class yySpider(Spider):
             item['address']= (ageandaddress.split('|')[1]).strip()
             item['xueli']  = (xueliandxinzi.split('|')[0]).strip()
             item['xinzi']  = (xueliandxinzi.split('|')[1]).strip()
-
             item['detailUrl'] = 'http://www.youyuan.com' + (li.xpath('.//a[@target="_blank"]/@href').extract())[0]
 
-            print item['name']
-            print item['url']
-            print item['uid']
-            print item['age']
-            print item['address']
-            print item['xueli']
-            print item['xinzi']
-            print item['detailUrl']
+            items.append(item)
+
+            yield item
+        # return items
+        # for x in range(0, items.__len__()):
+        #     items[x] = str(items[x])
+        # strdata = ''
+        #
+        # strdata = strdata.join(items)
+        # print strdata
+        #
+        # data = open('youyuandata', 'wb')
+        # data.write(strdata)
+        # data.close()
+
 
