@@ -49,7 +49,9 @@ class yySpider(Spider):
 
         else:
 
-            print dest
+            liResults = Selector(response)
+
+            print liResults
 
 
 
