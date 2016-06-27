@@ -12,6 +12,10 @@ class YouyuanItem(Item):
     xueli   = Field()
     xinzi   = Field()
 
-    #详细信息
+    #详细信息 url
     detailUrl = Field()
 
+
+class UserDetailItem(Item):
+    uid       = Field()
+    

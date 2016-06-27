@@ -24,6 +24,7 @@ class YouyuanPipeline(object):
     def process_item(self, item, spider):
         valid = True
         for data in item:
+
             if not data:
                 valid = False
                 raise DropItem("Missing {0}!".format(data))

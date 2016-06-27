@@ -4,6 +4,7 @@
 from scrapy import Spider
 from youyuan.items import YouyuanItem
 from scrapy.selector import Selector
+from scrapy import Request
 
 class yySpider(Spider):
     name = "yySpider"
@@ -17,40 +18,41 @@ class yySpider(Spider):
 
     def parse(self, response):
 
-        print response.url
+        dest = response.url.split("/")[3]
 
-        items = []
+        if dest == "find":
 
-        liResults = Selector(response).xpath('//ul[@class="mian search_list"]/li/dl/dd')
+            items = []
 
-        for li in liResults:
-            item = YouyuanItem()
+            liResults = Selector(response).xpath('//ul[@class="mian search_list"]/li/dl/dd')
 
-            other          = (li.xpath('.//font/text()').extract())
-            ageandaddress  = other[0].strip()
-            xueliandxinzi  = other[1].strip()
-            item['name']   = (li.xpath('.//a[@target="_blank"]/strong/text()').extract())[0]
-            item['url']    = (li.xpath('.//a[@class="sayHiBtnP hello"]/@data_usericon').extract())[0]
-            item['uid']    = (li.xpath('.//a[@class="sayHiBtnP hello"]/@data_userid').extract())[0]
-            item['age']    = (ageandaddress.split('|')[0]).strip()
-            item['address']= (ageandaddress.split('|')[1]).strip()
-            item['xueli']  = (xueliandxinzi.split('|')[0]).strip()
-            item['xinzi']  = (xueliandxinzi.split('|')[1]).strip()
-            item['detailUrl'] = 'http://www.youyuan.com' + (li.xpath('.//a[@target="_blank"]/@href').extract())[0]
+            for li in liResults:
+                item = YouyuanItem()
 
-            items.append(item)
+                other          = (li.xpath('.//font/text()').extract())
+                ageandaddress  = other[0].strip()
+                xueliandxinzi  = other[1].strip()
+                item['name']   = (li.xpath('.//a[@target="_blank"]/strong/text()').extract())[0]
+                item['url']    = (li.xpath('.//a[@class="sayHiBtnP hello"]/@data_usericon').extract())[0]
+                item['uid']    = (li.xpath('.//a[@class="sayHiBtnP hello"]/@data_userid').extract())[0]
+                item['age']    = (ageandaddress.split('|')[0]).strip()
+                item['address']= (ageandaddress.split('|')[1]).strip()
+                item['xueli']  = (xueliandxinzi.split('|')[0]).strip()
+                item['xinzi']  = (xueliandxinzi.split('|')[1]).strip()
+                item['detailUrl'] = 'http://www.youyuan.com' + (li.xpath('.//a[@target="_blank"]/@href').extract())[0]
 
-            yield item
-        # return items
-        # for x in range(0, items.__len__()):
-        #     items[x] = str(items[x])
-        # strdata = ''
-        #
-        # strdata = strdata.join(items)
-        # print strdata
-        #
-        # data = open('youyuandata', 'wb')
-        # data.write(strdata)
-        # data.close()
+                items.append(item)
+
+                yield item
+
+                yield Request(item['detailUrl'], callback=self.parse)
+
+        else:
+
+            print dest
+
+
+
+
 
 
